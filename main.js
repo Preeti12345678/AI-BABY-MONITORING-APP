@@ -2,7 +2,7 @@ objects=[];
 status="";
 img="";
 function preload(){
-    alarm=loadSound("mixkit-scanning-sci-fi-alarm-905.wav");
+    alarm=loadSound("alarm.wav");
 }
 function setup(){
     canvas=createCanvas(380,380);
@@ -16,30 +16,31 @@ function setup(){
 function modelLoaded(){
     console.log("Model Loaded");
     status=true;
-    object_detector.detect(img, gotResults);
 }
 function gotResults(error,results){
     if(error){
       console.log(error);
     }
     console.log(results);
+    objects=results;
 }
 function draw(){
     image(video,0,0,500,400);
     if(status !=""){
+        object_detector.detect(video, gotResults);
     for(i=0; i<objects.length; i++){
         if(objects[0].label==person){
             document.getElementById("status").innerHTML="Status= Detected baby"; 
-            stop(alarm);
+            alarm.stop();
         }
         else{
             document.getElementById("status").innerHTML="Status= Baby not detected";
-            play(alarm); 
+            alarm.play();
         }
     }
     if(objects.length<=0){
         document.getElementById("status").innerHTML="Status= Baby not detected";
-        play(alarm);
+        alarm.play();
     }
 }
 }
